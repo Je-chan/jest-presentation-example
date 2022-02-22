@@ -7,6 +7,8 @@ describe('mock 테스트', () => {
 
     const res = await mockTest.mockFn();
     expect(res).toBe('6 second!');
+    expect(mockTest.mockFn).toHaveBeenCalled();
+    expect(mockTest.mockFn).toHaveBeenCalledTimes(1);
   });
 });
 

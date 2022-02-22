@@ -27,6 +27,7 @@
 <script>
 import Logo from '~/components/Logo';
 import { mapState } from 'vuex';
+import axios from 'axios'
 export default {
   components: {
     Logo,
@@ -48,6 +49,7 @@ export default {
           href: '/author',
         },
       ],
+      test: []
     };
   },
   computed: {
@@ -63,8 +65,45 @@ export default {
       this.$router.push('/author');
     },
   },
+
+  async beforeMount() {
+    const res = await _fetchGrewInfo({grewName: '리베', team: 'all'})
+    this.test = [...res.data]
+    console.log('after', this.test)
+  },
+
+  async mounted () {
+      const res = await _fetchGrewInfo({grewName: '리베', team: 'all'})
+    this.test = [...res.data]
+    console.log('hey', this.test)
+  },
+
+
 };
+
+const _fetchGrewInfo = (payload) => {
+  const { grewName, team, id } = payload;
+  const name = grewName && grewName.toLowerCase();
+  const url = id
+    ? `http://localhost:4000/grew-person/?id=${id}`
+    : `http://localhost:4000/searching/?name=${name}&team=${team}`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err.response.data);
+      });
+  });
+};
+
 </script>
+
+
+
 <style lang="scss" scoped>
 /* @import '~/scss/main'; */
 
